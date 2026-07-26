@@ -72,7 +72,27 @@ This 35-word list is designed to test every key Urdu phonetic contrast—especia
 
 ---
 
-## 4. Specific Feedback Requested from the Therapist
+## 4. Required Audio Sample Targets & Repetitions Per Word
+
+To build a clinically sound dataset, we need multiple takes per word across two child cohorts:
+
+### 1. Repetitions Per Child (3 Takes Per Word)
+- **Each child should record each target word 3 separate times** (e.g., prompting the child with picture cards to say *"پانی"*, *"پانی"*, *"پانی"*).
+- **Why 3 takes?** Measuring **error consistency across repeated attempts** is a vital clinical marker. Inconsistent error patterns across repeated attempts of the same word indicate **Childhood Apraxia of Speech (CAS)**, whereas consistent errors indicate a **Phonological Disorder**.
+
+### 2. Targeted Total Samples Per Word
+
+| Cohort Category | Target Number of Children | Repetitions Per Word | **Total Required Audio Samples Per Word** | Total Corpus Audio Clips |
+|---|---|---|---|---|
+| **Typically-Developing Cohort** (Ages 4–12) | 20 – 30 children | 3 takes | **60 to 90 audio samples per word** | ~2,100 – 3,150 clips |
+| **Disordered / Clinical Cohort** (Referred for SSD) | 15 – 20 children | 3 takes | **45 to 60 audio samples per word** | ~1,575 – 2,100 clips |
+
+### 3. Manual Phonetic Transcription Ground-Truth
+- We request SLP manual phonetic transcription (narrow IPA annotation) for **at least 20% of recorded children** (approx. 5–6 children's full recordings = **15 to 18 manual transcriptions per word**). This serves as the clinical ground-truth test benchmark.
+
+---
+
+## 5. Specific Feedback Requested from the Therapist
 
 We would deeply appreciate your feedback on the following 4 questions:
 
