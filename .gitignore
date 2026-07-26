@@ -1,0 +1,49 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Large Datasets & Audio Cache Directories
+/data/*
+!/data/README.md
+
+/data_google/*
+!/data_google/README.md
+
+/cache/*
+!/cache/README.md
+
+/hf_dataset/*
+!/hf_dataset/README.md
+
+/comprehensive_word_audio/*
+!/comprehensive_word_audio/README.md
+
+/test_batch/*
+!/test_batch/README.md
+
+# Model Checkpoint Binary Directories
+/urdu_indicwav2vec_hindi_phoneme/*
+!/urdu_indicwav2vec_hindi_phoneme/README.md
+
+/urdu_xls_r_phoneme/*
+!/urdu_xls_r_phoneme/README.md
+
+# Large Audio Artifacts & Logs
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.tar.gz
+*.zip
+.phenome/
+audit_errors_report.json
+
+# Environments & IDE settings
+.venv/
+env/
+venv/
+ENV/
+.idea/
+.vscode/
+.DS_Store
