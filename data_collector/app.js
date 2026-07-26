@@ -140,6 +140,7 @@ function renderWord(index) {
   } else {
     previewContainer.style.display = "none";
     audioPreview.src = "";
+    document.getElementById("gopFeedbackPanel").style.display = "none";
   }
 
   updateGridActiveCard();
@@ -266,17 +267,58 @@ async function saveAudioToServer(word, blob) {
     });
     if (res.ok) {
       const data = await res.json();
-      showToast(`Saved to Laptop: ${data.saved_path || fileName}`);
+      if (data.gop_results) {
+        renderGopFeedback(data.gop_results);
+      }
+      const statusMsg = data.gop_results && data.gop_results.incorrect_count > 0
+        ? `Saved! Flagged incorrect sound: ${data.gop_results.incorrect_phonemes.join(", ")}`
+        : `Saved to Laptop: ${data.saved_path || fileName}`;
+      showToast(statusMsg);
     } else {
-      // Server not active fallback
       triggerBrowserDownload(blob, fileName);
       showToast(`Downloaded locally: ${fileName}`);
     }
   } catch (err) {
-    // If backend server not running, fallback to browser download
     triggerBrowserDownload(blob, fileName);
     showToast(`Saved recording: ${fileName}`);
   }
+}
+
+function renderGopFeedback(gop) {
+  const panel = document.getElementById("gopFeedbackPanel");
+  const badge = document.getElementById("gopStatusBadge");
+  const row = document.getElementById("phonemeBadgesRow");
+  const notice = document.getElementById("gopSummaryNotice");
+
+  if (!gop || !gop.phoneme_details || gop.phoneme_details.length === 0) {
+    panel.style.display = "none";
+    return;
+  }
+
+  panel.style.display = "block";
+  row.innerHTML = "";
+
+  const hasIncorrect = gop.incorrect_count > 0;
+  if (hasIncorrect) {
+    badge.className = "gop-badge-error";
+    badge.textContent = `${gop.incorrect_count} Incorrect Sound(s)`;
+    notice.textContent = `⚠️ Mispronounced phoneme(s) detected: ${gop.incorrect_phonemes.join(", ")}. Saved to GOP JSON.`;
+  } else {
+    badge.className = "gop-badge-ok";
+    badge.textContent = "All Phonemes Passed";
+    notice.textContent = `✅ All expected phonemes matched target pronunciation thresholds. Saved to GOP JSON.`;
+  }
+
+  gop.phoneme_details.forEach(p => {
+    const chip = document.createElement("div");
+    chip.className = `phone-chip ${p.incorrect ? 'incorrect' : 'correct'}`;
+    const mStr = p.gop_margin !== null ? (p.gop_margin > 0 ? `+${p.gop_margin}` : `${p.gop_margin}`) : 'n/a';
+    chip.innerHTML = `
+      <span>${p.phone}</span>
+      <span class="score">${mStr}</span>
+    `;
+    row.appendChild(chip);
+  });
 }
 
 function triggerBrowserDownload(blob, fileName) {

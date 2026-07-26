@@ -79,6 +79,16 @@
         <audio id="audioPreview" controls style="width: 100%; border-radius: 8px;"></audio>
       </div>
 
+      <!-- Real-Time Phoneme Analysis Feedback Panel -->
+      <div id="gopFeedbackPanel" class="gop-feedback-card" style="display: none;">
+        <div class="gop-header">
+          <span>Real-Time Phoneme Analysis (GOP Score)</span>
+          <span id="gopStatusBadge" class="gop-badge-ok">Passed</span>
+        </div>
+        <div id="phonemeBadgesRow" class="phoneme-badges-row"></div>
+        <div id="gopSummaryNotice" class="gop-summary-text"></div>
+      </div>
+
       <!-- Navigation Row -->
       <div class="nav-buttons">
         <button id="btnPrev" class="btn btn-secondary">

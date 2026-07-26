@@ -1,19 +1,38 @@
 """
-Urdu Child Speech Data Collector — Local Recording Server
-Runs a local web server at http://localhost:8000 and automatically saves audio 
-recordings sent from the web app directly into data_collector/recordings/{child_id}/
+Urdu Child Speech Data Collector — Local Recording & Real-Time GOP Server
+
+Runs a local web server at http://localhost:8000.
+When an audio recording is uploaded:
+1. Saves the audio file into data_collector/recordings/{child_id}/Take_{take_no}/{01_Paani}.webm
+2. Runs the Goodness-of-Pronunciation (GOP) & Forced Alignment model in real time.
+3. Identifies and saves incorrect/mispronounced phoneme labels into companion JSON file ({01_Paani}_gop.json).
+4. Returns real-time phoneme feedback to the browser UI.
 """
 
 import os
 import sys
 import json
 import re
+import datetime
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 
-# Paths
+# Add project root to sys.path for model imports
 BASE_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = BASE_DIR.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 RECORDINGS_DIR = BASE_DIR / "recordings"
+
+# Try loading GOP pipeline from testing.gop
+GOP_AVAILABLE = False
+try:
+    from testing.gop import run_gop_pipeline
+    GOP_AVAILABLE = True
+    print("[+] ML GOP & Forced Alignment Model loaded successfully!")
+except Exception as e:
+    print(f"[!] GOP Model import warning: {e}. (Will save audio without live GOP scoring if dependencies missing).")
 
 class DataCollectorHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -38,7 +57,6 @@ class DataCollectorHandler(SimpleHTTPRequestHandler):
             content_length = int(self.headers.get("Content-Length", 0))
             body = self.rfile.read(content_length)
 
-            # Simple multipart parser for audio blob and fields
             parts = body.split(b"--" + boundary)
             fields = {}
             file_data = None
@@ -65,9 +83,9 @@ class DataCollectorHandler(SimpleHTTPRequestHandler):
             child_id = fields.get("child_id", "Child_001").strip()
             take_no = fields.get("take_no", "1").strip()
             word_id = fields.get("word_id", "1").strip()
+            word_urdu = fields.get("word_urdu", "").strip()
             transliteration = fields.get("transliteration", "word").strip()
 
-            # Sanitize folder names
             child_dir = re.sub(r'[^\w\-]', '_', child_id)
             save_folder = RECORDINGS_DIR / child_dir / f"Take_{take_no}"
             save_folder.mkdir(parents=True, exist_ok=True)
@@ -78,15 +96,73 @@ class DataCollectorHandler(SimpleHTTPRequestHandler):
             if file_data:
                 with open(out_path, "wb") as f:
                     f.write(file_data)
-                print(f"[+] Saved recording to: {out_path}")
+                print(f"[+] Saved recording: {out_path}")
+
+            # Real-Time GOP Scoring & Labeling
+            gop_results = None
+            incorrect_phonemes = []
+            json_path_str = None
+
+            if GOP_AVAILABLE and word_urdu and out_path.exists():
+                try:
+                    print(f"[*] Running Real-Time GOP Analysis for '{word_urdu}'...")
+                    raw_gop = run_gop_pipeline(str(out_path), word_urdu, is_raw_phonemes=False)
+                    
+                    phoneme_details = []
+                    for r in raw_gop:
+                        phone = r["phone"]
+                        gop_margin = r["gop_margin"]
+                        gop_max_logit = r["gop_max_logit"]
+                        is_mispronounced = "MISPRONOUNCED" in r.get("flag", "") or (gop_margin is not None and gop_margin < 0.0)
+                        
+                        if is_mispronounced:
+                            incorrect_phonemes.append(phone)
+
+                        phoneme_details.append({
+                            "phone": phone,
+                            "gop_margin": round(gop_margin, 3) if gop_margin is not None else None,
+                            "gop_max_logit": round(gop_max_logit, 3) if gop_max_logit is not None else None,
+                            "status": "incorrect" if is_mispronounced else "correct",
+                            "incorrect": is_mispronounced
+                        })
+
+                    gop_results = {
+                        "word_id": int(word_id),
+                        "word_urdu": word_urdu,
+                        "transliteration": transliteration,
+                        "timestamp": datetime.datetime.now().isoformat(),
+                        "incorrect_phonemes": incorrect_phonemes,
+                        "phoneme_details": phoneme_details,
+                        "total_phonemes": len(phoneme_details),
+                        "incorrect_count": len(incorrect_phonemes)
+                    }
+
+                    # Save companion JSON file with real-time phoneme labels
+                    json_filename = f"{int(word_id):02d}_{transliteration}_gop.json"
+                    json_path = save_folder / json_filename
+                    with open(json_path, "w", encoding="utf-8") as jf:
+                        json.dump({
+                            "child_id": child_id,
+                            "take_no": take_no,
+                            "audio_file": out_filename,
+                            "gop_analysis": gop_results
+                        }, jf, ensure_ascii=False, indent=2)
+                    
+                    json_path_str = str(json_path.relative_to(BASE_DIR))
+                    print(f"[+] Saved real-time GOP labels to: {json_path}")
+
+                except Exception as ex:
+                    print(f"[!] Real-time GOP calculation warning: {ex}")
 
             response_data = json.dumps({
                 "status": "success",
-                "saved_path": str(out_path.relative_to(BASE_DIR))
-            }).encode("utf-8")
+                "saved_path": str(out_path.relative_to(BASE_DIR)),
+                "json_path": json_path_str,
+                "gop_results": gop_results
+            }, ensure_ascii=False).encode("utf-8")
 
             self.send_response(200)
-            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Type", "application/json; charset=utf-8")
             self.send_header("Content-Length", str(len(response_data)))
             self.end_headers()
             self.wfile.write(response_data)
@@ -101,11 +177,11 @@ def run_server(port=8000):
     RECORDINGS_DIR.mkdir(parents=True, exist_ok=True)
     server_address = ("", port)
     httpd = HTTPServer(server_address, DataCollectorHandler)
-    print("=" * 65)
-    print(f"🎙️  Urdu Child Speech Data Collector Server is running!")
-    print(f"👉 Open in your browser: http://localhost:{port}")
-    print(f"📂 Audio recordings will save to: {RECORDINGS_DIR}")
-    print("=" * 65)
+    print("=" * 70)
+    print(f"🎙️  Urdu Child Speech Data Collector & Real-Time GOP Server!")
+    print(f"👉 Open in browser: http://localhost:{port}")
+    print(f"📂 Audio & Real-Time GOP JSON saved to: {RECORDINGS_DIR}")
+    print("=" * 70)
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
