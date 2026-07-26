@@ -37,6 +37,7 @@ Reorganized all 25 root Python scripts into 5 domain-specific subdirectories wit
 
 ## 3. Core Documentation Index
 
+- [`slp_collaboration_brief.md`](file:///C:/Users/usman/Desktop/spech_pipeline/documentation/slp_collaboration_brief.md) — Collaboration brief & 35-word elicitation list review guide for Speech-Language Pathologists.
 - [`pipeline_architecture_guide.md`](file:///C:/Users/usman/Desktop/spech_pipeline/documentation/pipeline_architecture_guide.md) — Step-by-step breakdown of the multi-stage research pipeline architecture.
 - [`urdu_child_speech_disorder_pipeline.md`](file:///C:/Users/usman/Desktop/spech_pipeline/documentation/urdu_child_speech_disorder_pipeline.md) — Comprehensive end-to-end technical report.
 - [`urdu_pipeline_docA_research_design.md`](file:///C:/Users/usman/Desktop/spech_pipeline/documentation/urdu_pipeline_docA_research_design.md) — Research foundation, transfer learning strategy, & clinical background.
