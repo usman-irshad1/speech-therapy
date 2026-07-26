@@ -22,6 +22,9 @@ __pycache__/
 /test_batch/*
 !/test_batch/README.md
 
+/data_collector/recordings/*
+!/data_collector/recordings/README.md
+
 # Model Checkpoint Binary Directories
 /urdu_indicwav2vec_hindi_phoneme/*
 !/urdu_indicwav2vec_hindi_phoneme/README.md

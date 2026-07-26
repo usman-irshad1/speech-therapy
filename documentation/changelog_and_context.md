@@ -27,6 +27,7 @@ Reorganized all 25 root Python scripts into 5 domain-specific subdirectories wit
 | [`scraping/`](file:///C:/Users/usman/Desktop/spech_pipeline/scraping) | `scrapper.py`, `data_mining.py`, `gen_words.py`, `check_download.py` | Web scraping, data mining for dictionary/audio data, and word generation. |
 | [`data_organization/`](file:///C:/Users/usman/Desktop/spech_pipeline/data_organization) | `build_manifest.py`, `prepare_datset.py`, `import_common_voice.py`, `google_dataset.py`, `khattab_data_set.py`, `download_tester_data.py`, `extract.py`, `processor.py` | CSV manifest generation, HuggingFace dataset preparation, data extraction, and custom Wav2Vec2 processors. |
 | [`training/`](file:///C:/Users/usman/Desktop/spech_pipeline/training) | `train.py`, `fine_tuning_train.py`, `fine_tuning_urdu.py` | Model fine-tuning and training scripts for IndicWav2Vec and XLS-R backbones. |
+| [`data_collector/`](file:///C:/Users/usman/Desktop/spech_pipeline/data_collector) | `server.py`, `index.html`, `app.js`, `styles.css` | Interactive web application & local server for recording and auto-saving the 35-word Urdu child corpus on laptop. |
 | [`testing/`](file:///C:/Users/usman/Desktop/spech_pipeline/testing) | `gop.py`, `test_model.py`, `batch_test.py`, `coverage_test.py`, `live_check.py`, `debug.py` | Model evaluation, batch testing, GOP forced-alignment scoring, phoneme coverage audit, and live audio checks. |
 
 ### Script Import Adjustments

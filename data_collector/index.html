@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Urdu Child Speech Data Collector</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Top Header -->
+    <header>
+      <div class="logo-area">
+        <div class="logo-icon">🎙️</div>
+        <div class="logo-title">
+          <h1>Urdu Speech Data Collector</h1>
+          <p>35-Word Elicitation Corpus for Child Speech Therapy</p>
+        </div>
+      </div>
+
+      <div class="meta-form">
+        <div class="input-group">
+          <label for="childIdInput">Child ID / Name</label>
+          <input type="text" id="childIdInput" class="meta-input" value="Child_001" placeholder="e.g. Child_001">
+        </div>
+        <div class="input-group">
+          <label for="takeSelect">Session Take</label>
+          <select id="takeSelect" class="meta-input">
+            <option value="1">Take 1</option>
+            <option value="2">Take 2</option>
+            <option value="3">Take 3</option>
+          </select>
+        </div>
+        <button id="btnGrid" class="btn btn-secondary" style="margin-top: 16px;">
+          📑 Word Grid
+        </button>
+      </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-section">
+      <div class="progress-header">
+        <span>Session Progress</span>
+        <span id="progressText">1 / 35 (3%)</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div id="progressFill" class="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <!-- Main Flashcard Stage -->
+    <main class="flashcard-stage">
+      <div id="wordBadge" class="word-number-badge">Word 1 of 35</div>
+      
+      <div id="urduDisplay" class="urdu-word-display">پانی</div>
+      <div id="transliterationDisplay" class="transliteration">Paani</div>
+      <div id="meaningDisplay" class="meaning">Water</div>
+      <div id="targetSoundBadge" class="target-sound-pill">Target: Basic /n/</div>
+
+      <!-- Live Audio Waveform Visualizer -->
+      <div class="visualizer-container">
+        <canvas id="visualizer"></canvas>
+        <div id="timerOverlay" class="timer-overlay">0.0s</div>
+      </div>
+
+      <!-- Record Control Button -->
+      <div class="controls-row">
+        <button id="btnRecord" class="btn-record" title="Click to Record Audio (Spacebar)">
+          <span id="recordIcon">🎤</span>
+        </button>
+      </div>
+      <div id="recordLabel" style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 16px;">
+        RECORD AUDIO
+      </div>
+
+      <!-- Audio Preview Player -->
+      <div id="previewContainer" class="audio-preview-player" style="display: none;">
+        <audio id="audioPreview" controls style="width: 100%; border-radius: 8px;"></audio>
+      </div>
+
+      <!-- Navigation Row -->
+      <div class="nav-buttons">
+        <button id="btnPrev" class="btn btn-secondary">
+          ← Previous
+        </button>
+        <button id="btnNext" class="btn btn-primary">
+          Next Word →
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Word Grid Modal -->
+  <div id="gridModal" class="grid-modal">
+    <div class="grid-content">
+      <div class="grid-header">
+        <h2>Urdu Word Corpus List (35 Words)</h2>
+        <button id="btnCloseGrid" class="btn btn-secondary btn-icon-only">✕</button>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">
+        Click any word to jump directly to it. Cards marked with a green checkmark (✓) have been recorded in this session.
+      </p>
+      <div id="wordGrid" class="word-grid"></div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <span id="toastIcon">💾</span>
+    <span id="toastMessage">Recording saved to laptop!</span>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
