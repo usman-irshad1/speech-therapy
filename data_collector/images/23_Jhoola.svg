@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#ecfdf5"/>
+  <!-- Swing Frame -->
+  <line x1="40" y1="30" x2="160" y2="30" stroke="#475569" stroke-width="6"/>
+  <line x1="50" y1="30" x2="30" y2="180" stroke="#475569" stroke-width="5"/>
+  <line x1="150" y1="30" x2="170" y2="180" stroke="#475569" stroke-width="5"/>
+  <!-- Ropes -->
+  <line x1="80" y1="30" x2="80" y2="130" stroke="#ca8a04" stroke-width="3"/>
+  <line x1="120" y1="30" x2="120" y2="130" stroke="#ca8a04" stroke-width="3"/>
+  <!-- Wooden Seat -->
+  <rect x="70" y="130" width="60" height="12" rx="3" fill="#854d0e"/>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#f1f5f9"/>
+  <!-- Elephant Body -->
+  <circle cx="110" cy="115" r="50" fill="#64748b"/>
+  <!-- Head -->
+  <circle cx="65" cy="100" r="35" fill="#64748b"/>
+  <!-- Ear -->
+  <ellipse cx="80" cy="90" rx="22" ry="30" fill="#94a3b8"/>
+  <!-- Trunk -->
+  <path d="M45 110 Q20 120 25 145 Q35 155 40 140 Q35 125 55 120 Z" fill="#475569"/>
+  <!-- Eye -->
+  <circle cx="55" cy="90" r="4" fill="#ffffff"/>
+  <circle cx="54" cy="90" r="2" fill="#000000"/>
+  <!-- Tusk -->
+  <path d="M48 118 Q35 128 42 130 Z" fill="#ffffff"/>
+</svg>

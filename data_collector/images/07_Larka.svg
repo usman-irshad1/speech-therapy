@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#e0f2fe"/>
+  <!-- Boy Face -->
+  <circle cx="100" cy="95" r="45" fill="#fde047"/>
+  <!-- Hair -->
+  <path d="M55 85 C65 50 135 50 145 85 C130 65 70 65 55 85 Z" fill="#1e293b"/>
+  <!-- Eyes -->
+  <circle cx="82" cy="95" r="6" fill="#0f172a"/>
+  <circle cx="118" cy="95" r="6" fill="#0f172a"/>
+  <!-- Smile -->
+  <path d="M85 118 Q100 132 115 118" fill="none" stroke="#0f172a" stroke-width="4" stroke-linecap="round"/>
+  <!-- Shirt -->
+  <path d="M60 145 Q100 135 140 145 L150 190 L50 190 Z" fill="#0284c7"/>
+</svg>

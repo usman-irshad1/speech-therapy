@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#fef2f2"/>
+  <!-- Red Balloon -->
+  <ellipse cx="100" cy="85" rx="45" ry="55" fill="#ef4444"/>
+  <ellipse cx="80" cy="65" rx="12" ry="18" fill="#fca5a5" opacity="0.6"/>
+  <polygon points="95,140 105,140 100,147" fill="#dc2626"/>
+  <!-- String -->
+  <path d="M100 147 Q110 165 95 185" fill="none" stroke="#78350f" stroke-width="3" stroke-linecap="round"/>
+</svg>

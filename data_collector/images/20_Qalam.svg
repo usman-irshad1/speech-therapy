@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#f8fafc"/>
+  <!-- Fountain Pen -->
+  <g transform="rotate(-35 100 100)">
+    <rect x="90" y="30" width="20" height="100" fill="#1e293b"/>
+    <polygon points="90,130 110,130 100,165" fill="#f59e0b"/>
+    <polygon points="96,165 104,165 100,178" fill="#0f172a"/>
+    <rect x="87" y="60" width="26" height="8" rx="2" fill="#f59e0b"/>
+  </g>
+</svg>

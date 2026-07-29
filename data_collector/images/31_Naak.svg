@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#fff7ed"/>
+  <!-- Nose Profile/Icon -->
+  <path d="M90 40 L90 120 Q90 145 120 140 Q135 135 125 120 Q110 125 105 110 L105 40 Z" fill="#fdba74" stroke="#ea580c" stroke-width="3"/>
+  <!-- Nostril -->
+  <ellipse cx="115" cy="132" rx="6" ry="4" fill="#9a3412"/>
+</svg>

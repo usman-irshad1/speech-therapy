@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#fef3c7"/>
+  <!-- Cat Head -->
+  <circle cx="100" cy="110" r="50" fill="#f59e0b"/>
+  <!-- Ears -->
+  <polygon points="65,75 50,30 85,65" fill="#d97706"/>
+  <polygon points="135,75 150,30 115,65" fill="#d97706"/>
+  <!-- Inner Ears -->
+  <polygon points="67,70 57,38 80,63" fill="#fbcfe8"/>
+  <polygon points="133,70 143,38 120,63" fill="#fbcfe8"/>
+  <!-- Eyes -->
+  <ellipse cx="80" cy="105" rx="8" ry="12" fill="#15803d"/>
+  <ellipse cx="120" cy="105" rx="8" ry="12" fill="#15803d"/>
+  <circle cx="80" cy="105" r="3" fill="#ffffff"/>
+  <circle cx="120" cy="105" r="3" fill="#ffffff"/>
+  <!-- Nose & Mouth -->
+  <polygon points="95,120 105,120 100,126" fill="#f43f5e"/>
+  <path d="M92 128 Q100 135 100 128 Q100 135 108 128" fill="none" stroke="#78350f" stroke-width="3" stroke-linecap="round"/>
+  <!-- Whiskers -->
+  <line x1="45" y1="115" x2="70" y2="118" stroke="#78350f" stroke-width="2"/>
+  <line x1="45" y1="125" x2="70" y2="123" stroke="#78350f" stroke-width="2"/>
+  <line x1="155" y1="115" x2="130" y2="118" stroke="#78350f" stroke-width="2"/>
+  <line x1="155" y1="125" x2="130" y2="123" stroke="#78350f" stroke-width="2"/>
+</svg>

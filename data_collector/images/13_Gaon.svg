@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#fef9c3"/>
+  <!-- Green Hills -->
+  <path d="M0 140 Q60 90 130 140 Q170 110 200 150 L200 200 L0 200 Z" fill="#4ade80"/>
+  <!-- Small Hut 1 -->
+  <polygon points="40,110 70,110 55,90" fill="#b45309"/>
+  <rect x="43" y="110" width="24" height="20" fill="#fde047"/>
+  <!-- Small Hut 2 -->
+  <polygon points="120,125 160,125 140,100" fill="#b45309"/>
+  <rect x="125" y="125" width="30" height="25" fill="#fde047"/>
+  <!-- Sun -->
+  <circle cx="165" cy="45" r="22" fill="#facc15"/>
+</svg>

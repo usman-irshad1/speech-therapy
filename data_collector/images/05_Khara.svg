@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#f0fdf4"/>
+  <!-- Standing Person Silhouette / Character -->
+  <circle cx="100" cy="50" r="22" fill="#475569"/>
+  <!-- Body -->
+  <path d="M75 80 L125 80 L118 135 L82 135 Z" fill="#2563eb"/>
+  <!-- Legs -->
+  <rect x="84" y="135" width="12" height="50" rx="4" fill="#334155"/>
+  <rect x="104" y="135" width="12" height="50" rx="4" fill="#334155"/>
+  <!-- Arms standing tall -->
+  <rect x="62" y="80" width="10" height="45" rx="4" fill="#475569"/>
+  <rect x="128" y="80" width="10" height="45" rx="4" fill="#475569"/>
+  <!-- Arrow UP showing Standing stance -->
+  <path d="M100 175 L100 160 M95 165 L100 160 L105 165" stroke="#16a34a" stroke-width="3" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#fef3c7"/>
+  <!-- Lion Mane -->
+  <circle cx="100" cy="100" r="62" fill="#d97706"/>
+  <!-- Lion Face -->
+  <circle cx="100" cy="105" r="42" fill="#fbbf24"/>
+  <!-- Ears -->
+  <circle cx="65" cy="70" r="14" fill="#b45309"/>
+  <circle cx="135" cy="70" r="14" fill="#b45309"/>
+  <circle cx="65" cy="70" r="8" fill="#fde047"/>
+  <circle cx="135" cy="70" r="8" fill="#fde047"/>
+  <!-- Eyes -->
+  <circle cx="83" cy="95" r="6" fill="#1e293b"/>
+  <circle cx="117" cy="95" r="6" fill="#1e293b"/>
+  <circle cx="85" cy="93" r="2" fill="#ffffff"/>
+  <circle cx="119" cy="93" r="2" fill="#ffffff"/>
+  <!-- Nose & Snout -->
+  <ellipse cx="100" cy="115" rx="16" ry="12" fill="#fef08a"/>
+  <polygon points="94,110 106,110 100,117" fill="#78350f"/>
+  <!-- Mouth -->
+  <path d="M93 118 Q100 125 107 118" fill="none" stroke="#78350f" stroke-width="3" stroke-linecap="round"/>
+</svg>

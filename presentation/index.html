@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urdu Child SSD Assessment Pipeline — Progress Presentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #090d16;
+            --bg-card: rgba(18, 25, 41, 0.7);
+            --bg-card-hover: rgba(30, 41, 67, 0.8);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --border-bright: rgba(56, 189, 248, 0.4);
+            
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.25);
+            --secondary: #818cf8;
+            --accent: #34d399;
+            --warning: #fbbf24;
+            --danger: #f87171;
+            
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            
+            --font-main: 'Inter', sans-serif;
+            --font-heading: 'Outfit', sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(129, 140, 248, 0.08) 0%, transparent 45%);
+        }
+
+        /* Presentation Container */
+        .deck-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header / Top Bar */
+        .top-bar {
+            height: 60px;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(9, 13, 22, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 10;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000;
+            font-weight: 800;
+            font-size: 0.8rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .project-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+
+        .top-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-icon {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            border-color: var(--border-bright);
+        }
+
+        .btn-icon.active {
+            background: var(--primary-glow);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Slide Viewport */
+        .slide-viewport {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.98) translateY(10px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 3rem 4rem;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1) translateY(0);
+        }
+
+        /* Slide Typography */
+        .slide-header {
+            margin-bottom: 2rem;
+        }
+
+        .slide-subtitle {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-title {
+            font-family: var(--font-heading);
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 30%, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-body {
+            flex: 1;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.2rem;
+        }
+
+        /* Cards & Glass Containers */
+        .glass-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.75rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            border-color: var(--border-bright);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            background: var(--bg-card-hover);
+        }
+
+        .card-accent-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-text {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Metrics Stat Box */
+        .metric-value {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin: 0.5rem 0;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .metric-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+
+        .badge-success {
+            background: rgba(52, 211, 153, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .badge-highlight {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--primary);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        /* Pipeline Flow Representation */
+        .pipeline-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .pipeline-stage {
+            display: flex;
+            align-items: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .pipeline-stage:hover {
+            border-color: var(--border-bright);
+            transform: translateX(6px);
+        }
+
+        .stage-num {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid var(--primary-glow);
+            color: var(--primary);
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .stage-info {
+            flex: 1;
+        }
+
+        .stage-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+        }
+
+        .stage-desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .stage-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .status-complete {
+            background: rgba(52, 211, 153, 0.2);
+            color: var(--accent);
+        }
+
+        .status-active {
+            background: rgba(56, 189, 248, 0.2);
+            color: var(--primary);
+        }
+
+        .status-next {
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--warning);
+        }
+
+        /* Benchmark Bar Visualizer */
+        .chart-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .chart-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .chart-label-group {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .bar-track {
+            height: 28px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 7px;
+            transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            padding-right: 1rem;
+            justify-content: flex-end;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #000;
+        }
+
+        .fill-xlsr {
+            background: linear-gradient(90deg, #64748b, #94a3b8);
+        }
+
+        .fill-indic {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        /* Interactive Table */
+        .table-wrapper {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            overflow: hidden;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        tr:hover td {
+            background: rgba(56, 189, 248, 0.04);
+        }
+
+        .urdu-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        .phoneme-tag {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-family: var(--font-code);
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+
+        /* Bottom Controls / Progress Bar */
+        .bottom-bar {
+            height: 70px;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid var(--border-color);
+            background: rgba(9, 13, 22, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 10;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .progress-track {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 10%;
+            transition: width 0.3s ease;
+        }
+
+        .slide-counter {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            min-width: 60px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-nav {
+            background: var(--primary-glow);
+            border: 1px solid var(--border-bright);
+            color: var(--primary);
+            padding: 0.6rem 1.4rem;
+            border-radius: 10px;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-nav:hover {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .btn-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-color);
+            color: var(--text-dim);
+            box-shadow: none;
+        }
+
+        /* Speaker Notes Overlay */
+        .notes-panel {
+            position: fixed;
+            bottom: 80px;
+            right: 2rem;
+            width: 380px;
+            max-height: 250px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid var(--border-bright);
+            border-radius: 14px;
+            padding: 1.25rem;
+            backdrop-filter: blur(16px);
+            z-index: 100;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            display: none;
+            overflow-y: auto;
+        }
+
+        .notes-panel.active {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        .notes-title {
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .notes-content {
+            font-size: 0.88rem;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        /* Code Snippet Display */
+        .code-block {
+            background: #050811;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1rem;
+            font-family: var(--font-code);
+            font-size: 0.82rem;
+            color: #e2e8f0;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .code-keyword { color: #c084fc; }
+        .code-string { color: #34d399; }
+        .code-num { color: #fbbf24; }
+        .code-comment { color: #64748b; font-style: italic; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Slide 1 Hero styling */
+        .hero-layout {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid var(--primary-glow);
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 700;
+            width: fit-content;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-family: var(--font-heading);
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1.25rem;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #ffffff 40%, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="deck-container">
+        <!-- Top Navigation Bar -->
+        <header class="top-bar">
+            <div class="logo-area">
+                <span class="logo-badge">AI CLINICAL PIPELINE</span>
+                <span class="project-title">Urdu Child Speech Disorder Assessment</span>
+            </div>
+            <div class="top-controls">
+                <button class="btn-icon" id="btnNotes" title="Toggle Speaker Notes (N)">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                </button>
+                <button class="btn-icon" id="btnFullscreen" title="Toggle Fullscreen (F)">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Slide Viewport -->
+        <main class="slide-viewport">
+
+            <!-- SLIDE 1: Title Slide -->
+            <section class="slide active" data-slide="1">
+                <div class="hero-layout">
+                    <div class="hero-tag">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        PROJECT MILESTONE & PROGRESS PRESENTATION
+                    </div>
+                    <h1 class="hero-title">Urdu Child Speech Sound Disorder (SSD) Assessment Pipeline</h1>
+                    <p class="hero-desc">
+                        An end-to-end Machine Learning research pipeline for automatic pediatric speech sound disorder screening, forced alignment, and Goodness-of-Pronunciation (GOP) scoring in Urdu.
+                    </p>
+                    <div class="stats-row">
+                        <div class="glass-card">
+                            <div class="card-accent-border"></div>
+                            <div class="metric-value">9.47%</div>
+                            <div class="metric-label">Test Phoneme Error Rate</div>
+                            <div class="metric-badge badge-success">✓ IndicWav2Vec Winner</div>
+                        </div>
+                        <div class="glass-card">
+                            <div class="card-accent-border"></div>
+                            <div class="metric-value">44</div>
+                            <div class="metric-label">Urdu-IPA Phoneme Vocab</div>
+                            <div class="metric-badge badge-highlight">Rule-based G2P Engine</div>
+                        </div>
+                        <div class="glass-card">
+                            <div class="card-accent-border"></div>
+                            <div class="metric-value">35</div>
+                            <div class="metric-label">Word Elicitation Corpus</div>
+                            <div class="metric-badge badge-highlight">Targeted Clinical List</div>
+                        </div>
+                        <div class="glass-card">
+                            <div class="card-accent-border"></div>
+                            <div class="metric-value">5,026</div>
+                            <div class="metric-label">Held-Out Test Utterances</div>
+                            <div class="metric-badge badge-success">Benchmark Validated</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 2: Problem & Motivation -->
+            <section class="slide" data-slide="2">
+                <div class="slide-header">
+                    <div class="slide-subtitle">01 / Motivation & Clinical Need</div>
+                    <h2 class="slide-title">Addressing the Clinical Gap in Urdu Speech Therapy</h2>
+                </div>
+                <div class="slide-body grid-2">
+                    <div class="glass-card">
+                        <div class="card-title">
+                            <svg width="20" height="20" fill="none" stroke="var(--danger)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            Current Clinical Bottlenecks
+                        </div>
+                        <ul class="card-text" style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.8rem;">
+                            <li><strong>Zero Public Urdu Datasets:</strong> No annotated public speech sound disorder datasets or automated tools exist for Urdu-speaking children.</li>
+                            <li><strong>Manual & Time-Intensive SLP Scoring:</strong> Speech-Language Pathologists must manually listen and annotate phoneme errors, creating long waitlists.</li>
+                            <li><strong>Phonetic Complexity of Urdu:</strong> 38-44 phonemes including contrastive aspirated plosives (<span class="urdu-text">کھ, گھ</span>) and retroflex flaps (<span class="urdu-text">ڑ</span>) missed by standard ASR.</li>
+                            <li><strong>Subjective Assessment:</strong> Absence of objective, quantitative pronunciation metrics (GOP & PCC) for progress tracking.</li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-title">
+                            <svg width="20" height="20" fill="none" stroke="var(--accent)" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            The AI Pipeline Solution
+                        </div>
+                        <ul class="card-text" style="padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.8rem;">
+                            <li><strong>Phoneme-First Two-Stage Architecture:</strong> Decouples acoustic representation from disorder classification for maximum clinical interpretability.</li>
+                            <li><strong>Self-Supervised Transfer Learning:</strong> Leverages cross-lingual representations from IndicWav2Vec-Hindi to conquer low-resource child data constraints.</li>
+                            <li><strong>Logit-Based GOP & Alignment:</strong> Computes per-phone logit margins to pinpoint exact substitutions, omissions, and distortions.</li>
+                            <li><strong>SLP Collaboration & Data Collection:</strong> Interactive web-app collector deployed for standardized 35-word elicitation recordings.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 3: Architecture -->
+            <section class="slide" data-slide="3">
+                <div class="slide-header">
+                    <div class="slide-subtitle">02 / System Architecture</div>
+                    <h2 class="slide-title">5-Stage End-to-End Clinical ML Pipeline</h2>
+                </div>
+                <div class="slide-body">
+                    <div class="pipeline-flow">
+                        <div class="pipeline-stage">
+                            <div class="stage-num">00</div>
+                            <div class="stage-info">
+                                <div class="stage-title">Stage 0: Front-End Audio Preprocessing</div>
+                                <div class="stage-desc">16kHz Mono Resampling, Silero VAD Trimming, SpecAugment, & VTLP Audio Augmentation</div>
+                            </div>
+                            <span class="stage-status status-complete">Completed</span>
+                        </div>
+                        <div class="pipeline-stage">
+                            <div class="stage-num">01</div>
+                            <div class="stage-info">
+                                <div class="stage-title">Stage 1: Acoustic Backbone (IndicWav2Vec-Hindi)</div>
+                                <div class="stage-desc">Self-Supervised Feature Extractor fine-tuned on Urdu CTC Phoneme targets (9.47% Test PER)</div>
+                            </div>
+                            <span class="stage-status status-complete">Completed</span>
+                        </div>
+                        <div class="pipeline-stage">
+                            <div class="stage-num">02</div>
+                            <div class="stage-info">
+                                <div class="stage-title">Stage 2: Canonical G2P Engine & CTC Phoneme Recognizer</div>
+                                <div class="stage-desc">Rules-based Urdu-to-IPA mapping (~44 phoneme inventory) + Viterbi CTC Forced Alignment</div>
+                            </div>
+                            <span class="stage-status status-complete">Completed</span>
+                        </div>
+                        <div class="pipeline-stage">
+                            <div class="stage-num">03</div>
+                            <div class="stage-info">
+                                <div class="stage-title">Stage 3: Goodness-of-Pronunciation (GOP) Engine</div>
+                                <div class="stage-desc">Per-phone GOP_Margin & GOP_MaxLogit computation (Flags Substitutions, Omissions, Distortions)</div>
+                            </div>
+                            <span class="stage-status status-complete">Completed</span>
+                        </div>
+                        <div class="pipeline-stage">
+                            <div class="stage-num">04</div>
+                            <div class="stage-info">
+                                <div class="stage-title">Stage 4 & 5: Disorder Classifier & SLP Diagnostic Dashboard</div>
+                                <div class="stage-desc">Sequence/Graph Classifier (Articulation vs Phonological vs CAS) + Automated PDF Diagnostic Report</div>
+                            </div>
+                            <span class="stage-status status-next">In Progress</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 4: Backbone Benchmark Results -->
+            <section class="slide" data-slide="4">
+                <div class="slide-header">
+                    <div class="slide-subtitle">03 / Model Training & Benchmarks</div>
+                    <h2 class="slide-title">Acoustic Backbone Experiment: 9.47% PER Victory</h2>
+                </div>
+                <div class="slide-body grid-2">
+                    <div class="chart-box">
+                        <h3 style="font-family: var(--font-heading); font-size: 1.1rem; color: var(--text-main);">Held-Out Test Phoneme Error Rate (PER)</h3>
+                        
+                        <div class="chart-row">
+                            <div class="chart-label-group">
+                                <span>XLS-R-300M (Multilingual Baseline)</span>
+                                <span>13.21% PER</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill fill-xlsr" style="width: 65%;">13.21%</div>
+                            </div>
+                        </div>
+
+                        <div class="chart-row">
+                            <div class="chart-label-group">
+                                <span style="color: var(--primary);">IndicWav2Vec-Hindi (Primary Backbone-v1)</span>
+                                <span style="color: var(--accent);">9.47% PER</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill fill-indic" style="width: 45%;">9.47%</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 1rem; padding: 1rem; background: rgba(56, 189, 248, 0.08); border-radius: 10px; border: 1px solid var(--primary-glow); font-size: 0.88rem; color: var(--text-muted);">
+                            <strong style="color: var(--primary);">Key Finding:</strong> Transfer learning from IndicWav2Vec-Hindi yielded a <strong>~28% relative reduction in error</strong> over XLS-R, validating the Indo-Aryan phonetic transfer hypothesis.
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-accent-border"></div>
+                        <div class="card-title">Training Convergence Trajectory</div>
+                        <table style="margin-top: 1rem;">
+                            <thead>
+                                <tr>
+                                    <th>Epoch</th>
+                                    <th>Eval Loss</th>
+                                    <th>Dev PER (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Epoch 1.7</td><td>1.1180</td><td>28.61%</td></tr>
+                                <tr><td>Epoch 3.5</td><td>0.8642</td><td>21.85%</td></tr>
+                                <tr><td>Epoch 5.2</td><td>0.8223</td><td>19.84%</td></tr>
+                                <tr><td>Epoch 7.8</td><td>0.7816</td><td>17.91%</td></tr>
+                                <tr><td>Epoch 10.0</td><td><strong>0.7625</strong></td><td><strong style="color: var(--accent);">13.73%</strong></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 5: G2P Engine -->
+            <section class="slide" data-slide="5">
+                <div class="slide-header">
+                    <div class="slide-subtitle">04 / Phonetics & G2P Engineering</div>
+                    <h2 class="slide-title">Canonical Urdu Grapheme-to-Phoneme (G2P) Engine</h2>
+                </div>
+                <div class="slide-body grid-2">
+                    <div class="glass-card">
+                        <div class="card-accent-border"></div>
+                        <div class="card-title">Phoneme Inventory Coverage (~44 Tokens)</div>
+                        <ul class="card-text" style="display: flex; flex-direction: column; gap: 0.8rem; padding-left: 1rem;">
+                            <li><strong>Aspirated Plosives:</strong> Full support for <span class="urdu-text">کھ (/kʰ/), گھ (/gʰ/), بھ (/bʰ/), پھ (/pʰ/), تھ (/tʰ/), دھ (/dʰ/)</span>.</li>
+                            <li><strong>Retroflex Contrast:</strong> Distinct tokens for retroflex stop <span class="urdu-text">ٹ (/ʈ/)</span> and retroflex flap <span class="urdu-text">ڑ (/ɽ/)</span>.</li>
+                            <li><strong>Nasalized Vowels:</strong> Automatic detection of word-final & medial Noon Ghunna <span class="urdu-text">ں (/ɑ̃/, /ẽ/, /ĩ/)</span>.</li>
+                            <li><strong>Loan Fricatives/Uvulars:</strong> Preserves Arabic/Persian loan sounds <span class="urdu-text">خ (/x/), غ (/ɣ/), ق (/q/)</span>.</li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-title">G2P Rule Engine Example</div>
+                        <div class="code-block" style="margin-top: 0.5rem;">
+<span class="code-keyword">from</span> g2p.urdug2p <span class="code-keyword">import</span> UrduG2P
+
+g2p = UrduG2P()
+text = <span class="code-string">"کھڑا"</span> <span class="code-comment"># Standing</span>
+phonemes = g2p.convert(text)
+
+<span class="code-comment"># Output: ['kʰ', 'ə', 'ɽ', 'ɑ']</span>
+<span class="code-comment"># Captures aspirated velar + retroflex flap!</span>
+                        </div>
+                        <div style="margin-top: 1rem; font-size: 0.88rem; color: var(--text-muted);">
+                            The G2P engine forms the dictionary ground-truth for CTC forced alignment and GOP margin evaluation.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 6: GOP & Forced Alignment -->
+            <section class="slide" data-slide="6">
+                <div class="slide-header">
+                    <div class="slide-subtitle">05 / Error Detection Engine</div>
+                    <h2 class="slide-title">Logit-Based Goodness-of-Pronunciation (GOP)</h2>
+                </div>
+                <div class="slide-body grid-3">
+                    <div class="glass-card">
+                        <div class="card-accent-border"></div>
+                        <div class="card-title">1. Forced Alignment</div>
+                        <p class="card-text">
+                            Performs Viterbi decoding over acoustic logits constrained to target G2P phoneme sequence, outputting exact frame start/end boundaries for every phone.
+                        </p>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-accent-border"></div>
+                        <div class="card-title">2. GOP_Margin Scoring</div>
+                        <p class="card-text">
+                            Calculates logit margin: <br>
+                            <code>GOP_Margin = Logit(Target) - Max(Logit(Competitors))</code><br>
+                            Negative margins indicate competing substitution sounds.
+                        </p>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-accent-border"></div>
+                        <div class="card-title">3. Clinical Classification</div>
+                        <p class="card-text">
+                            Flags per-phone speech errors into 4 distinct categories:
+                            <span class="metric-badge badge-highlight" style="display:block; margin-top:0.5rem;">Substitution</span>
+                            <span class="metric-badge badge-highlight" style="display:block; margin-top:0.3rem;">Omission</span>
+                            <span class="metric-badge badge-highlight" style="display:block; margin-top:0.3rem;">Distortion</span>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 7: Engineering Integrity & Bug Fixes -->
+            <section class="slide" data-slide="7">
+                <div class="slide-header">
+                    <div class="slide-subtitle">06 / Engineering Rigor & Diagnostics</div>
+                    <h2 class="slide-title">Solved Edge Cases & Robustness Fixes</h2>
+                </div>
+                <div class="slide-body grid-3">
+                    <div class="glass-card">
+                        <div class="card-accent-border"></div>
+                        <div class="card-title">CTC Length Mismatch</div>
+                        <div style="font-size: 0.8rem; color: var(--danger); font-weight: 700; margin-bottom: 0.5rem;">BUG: eval_loss = inf</div>
+                        <p class="card-text">
+                            Clips shorter than CTC frame reduction ratio poisoned loss. <br>
+                            <strong>Fix:</strong> Implemented <code>filter_ctc_length()</code> preprocessing & <code>ctc_zero_infinity=True</code>.
+                        </p>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-accent-border"></div>
+                        <div class="card-title">Geminate Phone Alignment</div>
+                        <div style="font-size: 0.8rem; color: var(--danger); font-weight: 700; margin-bottom: 0.5rem;">BUG: Frame Collapsing</div>
+                        <p class="card-text">
+                            Grouping by phone value merged adjacent identical sounds (<span class="urdu-text">بلی, کتا</span>).<br>
+                            <strong>Fix:</strong> Switched forced-alignment frame grouping to exact CTC lattice position.
+                        </p>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-accent-border"></div>
+                        <div class="card-title">Dynamic Resumption</div>
+                        <div style="font-size: 0.8rem; color: var(--danger); font-weight: 700; margin-bottom: 0.5rem;">BUG: GPU Reset Loss</div>
+                        <p class="card-text">
+                            Hardcoded checkpoint paths caused training reset.<br>
+                            <strong>Fix:</strong> Built dynamic checkpoint detection (<code>resume_from_checkpoint=True</code>) across all trainers.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 8: Elicitation List & SLP Protocol -->
+            <section class="slide" data-slide="8">
+                <div class="slide-header">
+                    <div class="slide-subtitle">07 / Clinical Elicitation & Protocol</div>
+                    <h2 class="slide-title">35-Word Phonemically-Balanced Urdu Corpus</h2>
+                </div>
+                <div class="slide-body grid-2">
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Urdu Word</th>
+                                    <th>Transliteration</th>
+                                    <th>Target Phoneme Contrasts</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td class="urdu-text">پانی</td><td>Paani</td><td><span class="phoneme-tag">/n/</span> Dental nasal baseline</td></tr>
+                                <tr><td>2</td><td class="urdu-text">بلی</td><td>Billi</td><td><span class="phoneme-tag">/lː/</span> Geminate liquid</td></tr>
+                                <tr><td>5</td><td class="urdu-text">کھڑا</td><td>Khara</td><td><span class="phoneme-tag">/kʰ/</span> Aspirated + <span class="phoneme-tag">/ɽ/</span> Retroflex flap</td></tr>
+                                <tr><td>9</td><td class="urdu-text">دودھ</td><td>Doodh</td><td><span class="phoneme-tag">/dʰ/</span> Aspirated dental stop</td></tr>
+                                <tr><td>13</td><td class="urdu-text">گاؤں</td><td>Gaon</td><td><span class="phoneme-tag">/ɑ̃/</span> Nasalized vowel (ں)</td></tr>
+                                <tr><td>16</td><td class="urdu-text">ٹماٹر</td><td>Tamatar</td><td><span class="phoneme-tag">/ʈ/</span> Retroflex stop</td></tr>
+                                <tr><td>21</td><td class="urdu-text">خرگوش</td><td>Khargoosh</td><td><span class="phoneme-tag">/x/</span> Velar fricative</td></tr>
+                                <tr><td>22</td><td class="urdu-text">غبارہ</td><td>Ghubara</td><td><span class="phoneme-tag">/ɣ/</span> Voiced velar fricative</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-accent-border"></div>
+                        <div class="card-title">3-Takes Repetition Protocol</div>
+                        <p class="card-text" style="margin-bottom: 1rem;">
+                            Each child repeats every word <strong>3 separate times</strong> during picture-naming tasks.
+                        </p>
+                        <ul class="card-text" style="display: flex; flex-direction: column; gap: 0.8rem; padding-left: 1rem;">
+                            <li><strong>Diagnostic Marker for CAS:</strong> Inconsistent error patterns across repeated takes indicate Childhood Apraxia of Speech.</li>
+                            <li><strong>Phonological Disorder Marker:</strong> Consistent substitution patterns across takes indicate Phonological Disorder.</li>
+                            <li><strong>Target Dataset:</strong> 35 words × 3 takes = 105 clips/child. Target: ~5,000 total audio clips across clinical & control cohorts.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 9: Data Collector App -->
+            <section class="slide" data-slide="9">
+                <div class="slide-header">
+                    <div class="slide-subtitle">08 / Interactive Tools</div>
+                    <h2 class="slide-title">Data Collector Web Application & SLP Suite</h2>
+                </div>
+                <div class="slide-body grid-2">
+                    <div class="glass-card">
+                        <div class="card-accent-border"></div>
+                        <div class="card-title">Child Recording Web App (<code>data_collector/</code>)</div>
+                        <p class="card-text" style="margin-bottom: 1rem;">
+                            Lightweight local Node/Web application built for rapid picture-prompted speech recording in clinical settings.
+                        </p>
+                        <ul class="card-text" style="display: flex; flex-direction: column; gap: 0.6rem; padding-left: 1rem;">
+                            <li>✓ Auto-advancing picture cards for 35 target words</li>
+                            <li>✓ Instant VAD waveform preview & 3-take repetition counter</li>
+                            <li>✓ Auto-saves 16kHz mono WAV files formatted directly for manifest ingestion</li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-title">SLP Collaboration Brief (<code>slp_collaboration_brief.md</code>)</div>
+                        <p class="card-text" style="margin-bottom: 1rem;">
+                            Structured clinical feedback document shared with speech therapy partners.
+                        </p>
+                        <ul class="card-text" style="display: flex; flex-direction: column; gap: 0.6rem; padding-left: 1rem;">
+                            <li>✓ Vocabulary age-appropriateness review</li>
+                            <li>✓ Urdu developmental sound acquisition timeline (e.g. /ɽ/ mastery age)</li>
+                            <li>✓ Narrow IPA manual transcription guidelines for 20% benchmark test split</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLIDE 10: Roadmap & Next Steps -->
+            <section class="slide" data-slide="10">
+                <div class="slide-header">
+                    <div class="slide-subtitle">09 / Project Roadmap</div>
+                    <h2 class="slide-title">Immediate Milestones & Next Steps</h2>
+                </div>
+                <div class="slide-body grid-3">
+                    <div class="glass-card">
+                        <div class="card-accent-border"></div>
+                        <div class="card-title">1. Clinical GOP Verification</div>
+                        <div style="font-size: 0.8rem; color: var(--primary); font-weight: 700; margin-bottom: 0.5rem;">IMMEDIATE (CURRENT)</div>
+                        <p class="card-text">
+                            Run GOP scoring on deliberate mispronunciation recordings to calibrate optimal decision thresholds (<code>GOP_FLAG_THRESHOLD</code>).
+                        </p>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-accent-border"></div>
+                        <div class="card-title">2. Clinical Outreach & Data Drive</div>
+                        <div style="font-size: 0.8rem; color: var(--accent); font-weight: 700; margin-bottom: 0.5rem;">PHASE 2</div>
+                        <p class="card-text">
+                            Deploy Data Collector app to partner SLP clinics in Pakistan to gather 40-50 child speech datasets (typical vs SSD).
+                        </p>
+                    </div>
+
+                    <div class="glass-card">
+                        <div class="card-accent-border"></div>
+                        <div class="card-title">3. Stage 4 Classifier & Report UI</div>
+                        <div style="font-size: 0.8rem; color: var(--warning); font-weight: 700; margin-bottom: 0.5rem;">PHASE 3</div>
+                        <p class="card-text">
+                            Train hierarchical disorder classifier (PCC calculation) and release web-based SLP diagnostic PDF report generator.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Speaker Notes Drawer -->
+        <div class="notes-panel" id="notesPanel">
+            <div class="notes-title">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
+                Speaker Notes — <span id="notesSlideTitle">Slide 1</span>
+            </div>
+            <div class="notes-content" id="notesText">
+                Welcome everyone! Today I am presenting our progress on building the first automated Speech Sound Disorder assessment pipeline for Urdu-speaking children.
+            </div>
+        </div>
+
+        <!-- Bottom Controls Bar -->
+        <footer class="bottom-bar">
+            <div class="progress-container">
+                <span class="slide-counter" id="slideCounter">Slide 1 / 10</span>
+                <div class="progress-track">
+                    <div class="progress-bar-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn-nav" id="btnPrev" disabled>
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7"></path></svg>
+                    Previous
+                </button>
+                <button class="btn-nav" id="btnNext">
+                    Next
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Speaker notes repository for each slide
+        const speakerNotes = {
+            1: "Highlight key numbers right away: 9.47% PER beats XLS-R (13.21%). Emphasize that this is an end-to-end clinical pipeline specifically for Urdu-speaking children.",
+            2: "Explain the lack of public Urdu speech datasets and why SLPs need automated tools to objective scoring (GOP & PCC) to reduce waiting lists.",
+            3: "Walk through the 5-stage architecture: Stage 0 preprocessing, Stage 1 IndicWav2Vec backbone, Stage 2 G2P, Stage 3 GOP scoring, and Stages 4/5 clinical reporting.",
+            4: "Focus on the benchmark victory: Transfer learning from IndicWav2Vec-Hindi gave a 28% relative PER reduction over XLS-R. Highlight the smooth convergence curve.",
+            5: "Explain G2P rules: Urdu has ~44 phoneme tokens including aspirated plosives and retroflex flaps. Show how G2P generates ground truth.",
+            6: "Detail GOP margin formula: GOP_Margin = Logit(Target) - Max(Logit(Competitors)). Explain how negative margins flag substitutions.",
+            7: "Highlight technical rigor: Mention how we solved the CTC length mismatch (inf loss bug) and geminate consonant frame collapsing bug.",
+            8: "Discuss the 35-word list and 3-takes repetition protocol: Repetitions help differentiate Childhood Apraxia of Speech (inconsistent errors) from Phonological Disorders (consistent errors).",
+            9: "Showcase the interactive recording app in data_collector/ and the SLP collaboration brief created to engage clinical therapists.",
+            10: "Conclude with next steps: Clinical GOP verification on deliberate mispronunciations, clinical data collection drive, and building the web PDF report interface."
+        };
+
+        let currentSlide = 1;
+        const totalSlides = 10;
+
+        const slides = document.querySelectorAll('.slide');
+        const slideCounter = document.getElementById('slideCounter');
+        const progressFill = document.getElementById('progressFill');
+        const btnPrev = document.getElementById('btnPrev');
+        const btnNext = document.getElementById('btnNext');
+        const btnNotes = document.getElementById('btnNotes');
+        const notesPanel = document.getElementById('notesPanel');
+        const notesSlideTitle = document.getElementById('notesSlideTitle');
+        const notesText = document.getElementById('notesText');
+        const btnFullscreen = document.getElementById('btnFullscreen');
+
+        function updateSlide(targetSlide) {
+            if (targetSlide < 1 || targetSlide > totalSlides) return;
+
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+                if (parseInt(slide.dataset.slide) === targetSlide) {
+                    slide.classList.add('active');
+                }
+            });
+
+            currentSlide = targetSlide;
+            
+            // Update UI Counter & Bar
+            slideCounter.textContent = `Slide ${currentSlide} / ${totalSlides}`;
+            progressFill.style.width = `${(currentSlide / totalSlides) * 100}%`;
+
+            // Update Nav Buttons
+            btnPrev.disabled = currentSlide === 1;
+            btnNext.disabled = currentSlide === totalSlides;
+
+            // Update Speaker Notes
+            notesSlideTitle.textContent = `Slide ${currentSlide}`;
+            notesText.textContent = speakerNotes[currentSlide] || "No notes for this slide.";
+        }
+
+        // Event Listeners
+        btnPrev.addEventListener('click', () => updateSlide(currentSlide - 1));
+        btnNext.addEventListener('click', () => updateSlide(currentSlide + 1));
+
+        btnNotes.addEventListener('click', () => {
+            notesPanel.classList.toggle('active');
+            btnNotes.classList.toggle('active');
+        });
+
+        btnFullscreen.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => console.log(err));
+            } else {
+                document.exitFullscreen().catch(err => console.log(err));
+            }
+        });
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                e.preventDefault();
+                updateSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                updateSlide(currentSlide - 1);
+            } else if (e.key === 'n' || e.key === 'N') {
+                notesPanel.classList.toggle('active');
+                btnNotes.classList.toggle('active');
+            } else if (e.key === 'f' || e.key === 'F') {
+                btnFullscreen.click();
+            }
+        });
+
+        // Touch Swipe Support
+        let touchStartX = 0;
+        let touchEndX = 0;
+        document.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            if (touchStartX - touchEndX > 50) updateSlide(currentSlide + 1);
+            if (touchEndX - touchStartX > 50) updateSlide(currentSlide - 1);
+        });
+
+        // Initialize
+        updateSlide(1);
+    </script>
+</body>
+</html>

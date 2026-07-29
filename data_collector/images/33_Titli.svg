@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#fdf4ff"/>
+  <!-- Butterfly Wings Top -->
+  <path d="M100 100 Q40 30 30 80 Q25 120 100 105 Z" fill="#c084fc"/>
+  <path d="M100 100 Q160 30 170 80 Q175 120 100 105 Z" fill="#c084fc"/>
+  <!-- Butterfly Wings Bottom -->
+  <path d="M100 105 Q45 130 55 165 Q85 175 100 115 Z" fill="#e879f9"/>
+  <path d="M100 105 Q155 130 145 165 Q115 175 100 115 Z" fill="#e879f9"/>
+  <!-- Body -->
+  <rect x="96" y="70" width="8" height="70" rx="4" fill="#4c1d95"/>
+  <!-- Antennae -->
+  <path d="M98 70 Q85 45 75 50" stroke="#4c1d95" stroke-width="2" fill="none"/>
+  <path d="M102 70 Q115 45 125 50" stroke="#4c1d95" stroke-width="2" fill="none"/>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#fef3c7"/>
+  <!-- Camel Hump & Body -->
+  <path d="M45 135 L55 105 Q75 60 95 100 Q120 55 145 105 L160 135 Z" fill="#d97706"/>
+  <!-- Neck & Head -->
+  <path d="M45 135 Q30 90 40 60 L60 55 L55 85 L65 110 Z" fill="#b45309"/>
+  <!-- Legs -->
+  <rect x="60" y="135" width="10" height="45" rx="3" fill="#92400e"/>
+  <rect x="80" y="135" width="10" height="45" rx="3" fill="#92400e"/>
+  <rect x="125" y="135" width="10" height="45" rx="3" fill="#92400e"/>
+  <rect x="145" y="135" width="10" height="45" rx="3" fill="#92400e"/>
+</svg>

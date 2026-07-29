@@ -131,10 +131,28 @@ def run_gop_pipeline(audio_path: str, text_or_phonemes: str, is_raw_phonemes: bo
     model.eval()
 
     # Audio Processing
-    speech, sr = torchaudio.load(audio_path)
-    if sr != 16000:
-        speech = torchaudio.functional.resample(speech, sr, 16000)
-    speech = speech.mean(dim=0)  # Ensure mono audio
+    try:
+        speech, sr = torchaudio.load(audio_path)
+        if sr != 16000:
+            speech = torchaudio.functional.resample(speech, sr, 16000)
+        speech = speech.mean(dim=0)  # Ensure mono audio
+    except Exception:
+        import subprocess
+        try:
+            import imageio_ffmpeg
+            ffmpeg_exe = imageio_ffmpeg.get_ffmpeg_exe()
+        except ImportError:
+            ffmpeg_exe = "ffmpeg"
+        cmd = [
+            ffmpeg_exe, "-i", str(audio_path),
+            "-f", "s16le", "-ac", "1", "-ar", "16000", "-"
+        ]
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = proc.communicate()
+        if proc.returncode != 0:
+            raise RuntimeError(f"Could not load audio file '{audio_path}': {err.decode('utf-8', errors='ignore')}")
+        audio_np = np.frombuffer(out, dtype=np.int16).astype(np.float32) / 32768.0
+        speech = torch.from_numpy(audio_np)
 
     inputs = processor(speech.numpy(), sampling_rate=16000, return_tensors="pt")
     input_values = inputs.input_values.to(device)

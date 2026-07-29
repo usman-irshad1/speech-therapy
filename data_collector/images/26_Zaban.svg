@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#fff1f2"/>
+  <!-- Mouth Outline -->
+  <path d="M40 90 Q100 40 160 90 Q100 130 40 90 Z" fill="#9f1239"/>
+  <!-- Tongue sticking out -->
+  <path d="M70 100 Q100 175 130 100 Z" fill="#fb7185" stroke="#e11d48" stroke-width="3"/>
+  <line x1="100" y1="110" x2="100" y2="145" stroke="#e11d48" stroke-width="3"/>
+</svg>

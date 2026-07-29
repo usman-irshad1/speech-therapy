@@ -1,0 +1,158 @@
+from collections import Counter
+
+CISAMPA_TO_IPA = {
+    "P": "p", "P_H": "pʰ",
+    "B": "b", "B_H": "bʰ",
+    "T_D": "t", "T_D_H": "tʰ",
+    "D_D": "d", "D_D_H": "dʰ",
+    "TT": "ʈ", "TT_H": "ʈʰ",
+    "DD": "ɖ", "DD_H": "ɖʰ",
+    "K": "k", "K_H": "kʰ",
+    "G": "g", "G_H": "gʰ",
+    "Q": "q",
+    "T_SH": "tʃ", "T_SH_H": "tʃʰ",
+    "D_ZZ": "dʒ", "D_ZZ_H": "dʒʰ",
+    "F": "f", "S": "s", "Z": "z", "SH": "ʃ", "ZZ": "ʒ",
+    "X": "x", "7": "ɣ", "H": "h",
+    "M": "m", "N": "n", "NG": "ŋ",
+    "L": "l", "R": "r",
+    "RR": "ɽ",
+    "RR_H": "ɽʰ",
+    "J": "j",
+    "II": "i", "AE": "e", "E": "ɛ", "AA": "ɑ", "A": "ə",
+    "I": "ɪ", "U": "ʊ", "UU": "u", "OO": "o", "O": "ɔ",
+    "IIN": "ĩ", "AEN": "ẽ", "AAN": "ɑ̃", "UUN": "ũ", "OON": "õ", "ON": "ɔ̃",
+    "SIL": None,
+}
+
+FOLD_TO_BASE = {
+    "N_H": "n",
+    "R_H": "r",
+}
+
+UNRESOLVED_INTERIM_FOLD = {
+    "Y": None,
+    "V": "w",
+    "V_H": "w",
+    "AY": "ɛ",
+    "AYN": "ɛ",
+}
+
+SILENCE_MARKERS = {"SIL"}
+
+
+def build_full_mapping() -> dict:
+    mapping = dict(CISAMPA_TO_IPA)
+    mapping.update(FOLD_TO_BASE)
+    mapping.update(UNRESOLVED_INTERIM_FOLD)
+    return mapping
+
+
+_MAPPING = build_full_mapping()
+
+
+def tokenize_cisampa_line(raw_line: str) -> list:
+    tokens = []
+    for chunk in raw_line.strip().split():
+        parts = chunk.split("##")
+        for i, part in enumerate(parts):
+            if part:
+                tokens.append(part)
+            if i < len(parts) - 1:
+                tokens.append("|")
+
+    cleaned = []
+    for t in tokens:
+        if t == "|" and (not cleaned or cleaned[-1] == "|"):
+            continue
+        cleaned.append(t)
+    if cleaned and cleaned[-1] == "|":
+        cleaned.pop()
+    return cleaned
+
+
+def convert_transcription(cisampa_tokens: list) -> tuple:
+    ipa_tokens = []
+    unresolved = []
+
+    for tok in cisampa_tokens:
+        if tok == "|":
+            ipa_tokens.append("|")
+            continue
+
+        if tok in SILENCE_MARKERS:
+            continue
+
+        if tok not in _MAPPING:
+            unresolved.append((tok, "no mapping defined"))
+            continue
+
+        mapped = _MAPPING[tok]
+        if mapped is None:
+            unresolved.append((tok, "deliberately unmapped"))
+            continue
+
+        ipa_tokens.append(mapped)
+
+    return ipa_tokens, unresolved
+
+
+def audit_prus_transcriptions(transcriptions: list) -> Counter:
+    unresolved_counter = Counter()
+
+    for tokens in transcriptions:
+        _, unresolved = convert_transcription(tokens)
+        for sym, reason in unresolved:
+            unresolved_counter[(sym, reason)] += 1
+
+    if not unresolved_counter:
+        print("All CISAMPA symbols in this transcription set mapped cleanly.")
+    else:
+        print("Unresolved/dropped CISAMPA symbols:")
+        for (sym, reason), count in unresolved_counter.most_common():
+            print(f"  {sym:8} x{count:<5} -- {reason}")
+
+    return unresolved_counter
+
+
+def audit_against_vocab(vocab_path: str = "urdu_phoneme_vocab.json") -> list:
+    import json
+    with open(vocab_path, encoding="utf-8") as f:
+        vocab = set(json.load(f).keys())
+
+    produced = {v for v in _MAPPING.values() if v is not None}
+    missing_from_vocab = sorted(produced - vocab)
+
+    if missing_from_vocab:
+        print(f"[WARN] Mapping produces {len(missing_from_vocab)} symbol(s) "
+              f"not present in {vocab_path}: {missing_from_vocab}")
+    else:
+        print(f"OK -- every symbol this mapping produces exists in {vocab_path}.")
+
+    return missing_from_vocab
+
+
+if __name__ == "__main__":
+    raw_line = "##N II L A M##N AE##S AA##"
+    tokenized = tokenize_cisampa_line(raw_line)
+    print(f"Raw line:  {raw_line!r}")
+    print(f"Tokenized: {tokenized}")
+    ipa, unresolved = convert_transcription(tokenized)
+    print(f"  IPA:        {ipa}")
+    print(f"  Unresolved: {unresolved}\n")
+
+    examples = [
+        "N II L A M N AE S AA".split(),
+        "RR_H II N_H R_H".split(),
+        "T_SH_H D_ZZ_H SIL".split(),
+        tokenized,
+    ]
+
+    for ex in examples:
+        ipa, unresolved = convert_transcription(ex)
+        print(f"CISAMPA: {ex}")
+        print(f"  IPA:        {ipa}")
+        print(f"  Unresolved: {unresolved}\n")
+
+    print("--- Full-corpus style audit ---")
+    audit_prus_transcriptions(examples)

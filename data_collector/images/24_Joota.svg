@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#eff6ff"/>
+  <!-- Sneaker Shoe -->
+  <path d="M35 120 L55 80 Q90 85 110 105 L165 110 C175 110 180 135 165 145 L35 145 Z" fill="#2563eb"/>
+  <rect x="30" y="145" width="145" height="18" rx="4" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <!-- Laces -->
+  <line x1="75" y1="95" x2="90" y2="105" stroke="#ffffff" stroke-width="3"/>
+  <line x1="82" y1="105" x2="97" y2="115" stroke="#ffffff" stroke-width="3"/>
+</svg>

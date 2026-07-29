@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#f0f9ff"/>
+  <!-- Eye Shape -->
+  <path d="M30 100 Q100 35 170 100 Q100 165 30 100 Z" fill="#ffffff" stroke="#0284c7" stroke-width="4"/>
+  <!-- Iris -->
+  <circle cx="100" cy="100" r="32" fill="#2563eb"/>
+  <!-- Pupil -->
+  <circle cx="100" cy="100" r="16" fill="#0f172a"/>
+  <!-- Reflection -->
+  <circle cx="90" cy="90" r="6" fill="#ffffff"/>
+</svg>

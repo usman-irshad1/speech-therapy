@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#f8fafc"/>
+  <!-- Map Pin / Location Question -->
+  <path d="M100 35 C70 35 50 58 50 88 C50 130 100 175 100 175 C100 175 150 130 150 88 C150 58 130 35 100 35 Z" fill="#ef4444"/>
+  <circle cx="100" cy="82" r="22" fill="#ffffff"/>
+  <text x="100" y="93" font-family="Arial" font-size="32" font-weight="bold" fill="#ef4444" text-anchor="middle">?</text>
+</svg>

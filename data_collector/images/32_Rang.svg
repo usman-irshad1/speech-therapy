@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#faf5ff"/>
+  <!-- Artist Palette -->
+  <path d="M50 60 C100 30 170 50 170 110 C170 160 120 170 80 150 C50 135 30 90 50 60 Z" fill="#d97706"/>
+  <!-- Thumb Hole -->
+  <circle cx="140" cy="130" r="12" fill="#faf5ff"/>
+  <!-- Paint Blobs -->
+  <circle cx="70" cy="75" r="12" fill="#ef4444"/>
+  <circle cx="105" cy="65" r="12" fill="#3b82f6"/>
+  <circle cx="140" cy="80" r="12" fill="#22c55e"/>
+  <circle cx="75" cy="115" r="12" fill="#eab308"/>
+</svg>

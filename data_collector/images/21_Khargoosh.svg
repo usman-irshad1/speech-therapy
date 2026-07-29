@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#f0fdf4"/>
+  <!-- Long Ears -->
+  <ellipse cx="80" cy="55" rx="12" ry="40" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+  <ellipse cx="120" cy="55" rx="12" ry="40" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+  <ellipse cx="80" cy="55" rx="6" ry="28" fill="#fbcfe8"/>
+  <ellipse cx="120" cy="55" rx="6" ry="28" fill="#fbcfe8"/>
+  <!-- Head -->
+  <circle cx="100" cy="115" r="45" fill="#ffffff" stroke="#cbd5e1" stroke-width="3"/>
+  <!-- Eyes -->
+  <circle cx="83" cy="105" r="5" fill="#0f172a"/>
+  <circle cx="117" cy="105" r="5" fill="#0f172a"/>
+  <!-- Pink Nose -->
+  <polygon points="95,118 105,118 100,124" fill="#f43f5e"/>
+  <!-- Cheeks -->
+  <circle cx="70" cy="122" r="8" fill="#fbcfe8" opacity="0.6"/>
+  <circle cx="130" cy="122" r="8" fill="#fbcfe8" opacity="0.6"/>
+</svg>

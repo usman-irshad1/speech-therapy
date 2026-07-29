@@ -3,36 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Urdu Child Speech Data Collector</title>
+  <title>Urdu Child Speech Data Collector & TAAPU Assessment</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+  <!-- INITIAL CHILD INTAKE MODAL (Mandatory before starting) -->
+  <div id="intakeModal" class="intake-modal-overlay">
+    <div class="intake-card">
+      <div class="intake-header">
+        <div class="intake-logo">🎙️</div>
+        <h2>Child Information Setup</h2>
+        <p>Please enter the child's details to initialize the TAAPU speech session and Excel report.</p>
+      </div>
+
+      <form id="intakeForm" onsubmit="event.preventDefault(); startChildSession();">
+        <div class="form-group">
+          <label for="intakeChildId">Child ID / Identifier <span class="required">*</span></label>
+          <input type="text" id="intakeChildId" class="intake-input" value="Child_001" placeholder="e.g. Child_001" required>
+        </div>
+
+        <div class="form-group">
+          <label for="intakeChildName">Child Full Name <span class="required">*</span></label>
+          <input type="text" id="intakeChildName" class="intake-input" placeholder="e.g. Ali Ahmad" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label for="intakeChildAge">Child Age <span class="required">*</span></label>
+            <input type="text" id="intakeChildAge" class="intake-input" placeholder="e.g. 5.5 Years" required>
+          </div>
+
+          <div class="form-group flex-1">
+            <label for="intakeTakeSelect">Session Take <span class="required">*</span></label>
+            <select id="intakeTakeSelect" class="intake-input">
+              <option value="1">Take 1</option>
+              <option value="2">Take 2</option>
+              <option value="3">Take 3</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-large btn-full">
+          🚀 Start TAAPU Assessment Session
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TAKE COMPLETION MODAL (Triggered when 35 words completed) -->
+  <div id="takeCompletionModal" class="intake-modal-overlay">
+    <div class="intake-card completion-card">
+      <div class="intake-header">
+        <div class="completion-badge-icon">🎉</div>
+        <h2 id="completionModalTitle">Take 1 Completed!</h2>
+        <p id="completionModalDesc">You have successfully evaluated all 35 words for child <strong id="completionChildName">--</strong>.</p>
+      </div>
+
+      <div class="completion-stats-box">
+        <div class="stat-box-item">
+          <span class="stat-num" id="completionEvaluatedCount">35 / 35</span>
+          <span class="stat-lbl">Words Evaluated</span>
+        </div>
+        <div class="stat-box-item">
+          <span class="stat-num text-success" id="completionAccuracy">100%</span>
+          <span class="stat-lbl">Accuracy Rate</span>
+        </div>
+        <div class="stat-box-item">
+          <span class="stat-num text-error" id="completionIncorrectCount">0</span>
+          <span class="stat-lbl">Incorrect Phonemes</span>
+        </div>
+      </div>
+
+      <div class="completion-actions">
+        <button id="btnNextTakeModal" class="btn btn-primary btn-large btn-full">
+          ➡️ Proceed to Take 2
+        </button>
+        <div class="form-row" style="margin-top: 10px;">
+          <button id="btnExportExcelModal" class="btn btn-excel flex-1">
+            📊 Export Excel (.xlsx)
+          </button>
+          <button id="btnCloseCompletionModal" class="btn btn-secondary flex-1">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APPLICATION CONTAINER -->
   <div class="app-container">
     
     <!-- Top Header -->
-    <header>
+    <header class="app-header">
       <div class="logo-area">
         <div class="logo-icon">🎙️</div>
         <div class="logo-title">
-          <h1>Urdu Speech Data Collector</h1>
+          <h1>Urdu Speech Data Collector & TAAPU</h1>
           <p>35-Word Elicitation Corpus for Child Speech Therapy</p>
         </div>
       </div>
 
-      <div class="meta-form">
-        <div class="input-group">
-          <label for="childIdInput">Child ID / Name</label>
-          <input type="text" id="childIdInput" class="meta-input" value="Child_001" placeholder="e.g. Child_001">
+      <!-- Active Child Info Display -->
+      <div class="child-info-chip" id="childInfoChip">
+        <div class="child-meta-text">
+          <span class="meta-item"><strong>ID:</strong> <span id="hdrChildId">Child_001</span></span>
+          <span class="meta-item"><strong>Name:</strong> <span id="hdrChildName">--</span></span>
+          <span class="meta-item"><strong>Age:</strong> <span id="hdrChildAge">--</span></span>
+          <span class="meta-item"><strong>Take:</strong> <span id="hdrChildTake">1</span></span>
         </div>
-        <div class="input-group">
-          <label for="takeSelect">Session Take</label>
-          <select id="takeSelect" class="meta-input">
-            <option value="1">Take 1</option>
-            <option value="2">Take 2</option>
-            <option value="3">Take 3</option>
-          </select>
-        </div>
-        <button id="btnGrid" class="btn btn-secondary" style="margin-top: 16px;">
+        <button id="btnEditChild" class="btn btn-sm btn-secondary" title="Change Child Info">✏️ Change Child / Take</button>
+      </div>
+
+      <div class="header-actions">
+        <button id="btnToggleGop" class="btn btn-gop-on" title="Toggle Real-Time ML Pronunciation Feedback">
+          🤖 ML Feedback: ON
+        </button>
+        <button id="btnExportExcel" class="btn btn-excel">
+          📊 Export Excel (.xlsx)
+        </button>
+        <button id="btnGrid" class="btn btn-secondary">
           📑 Word Grid
         </button>
       </div>
@@ -41,7 +134,7 @@
     <!-- Progress Bar -->
     <div class="progress-section">
       <div class="progress-header">
-        <span>Session Progress</span>
+        <span>Corpus Progress & Evaluation (<span id="progressTakeLabel">Take 1</span>)</span>
         <span id="progressText">1 / 35 (3%)</span>
       </div>
       <div class="progress-bar-bg">
@@ -51,66 +144,170 @@
 
     <!-- Main Flashcard Stage -->
     <main class="flashcard-stage">
-      <div id="wordBadge" class="word-number-badge">Word 1 of 35</div>
+      <div class="stage-top-bar">
+        <div id="wordBadge" class="word-number-badge">Word 1 of 35</div>
+        <div id="evalStatusBadge" class="eval-status-pill status-correct">✓ Pronunciation Correct</div>
+      </div>
       
+      <!-- WORD PICTURE DISPLAY CARD -->
+      <div class="word-picture-container">
+        <img id="wordImage" src="images/01_Paani.svg" alt="Word Picture" class="word-picture" />
+      </div>
+
+      <!-- Word Text & Meaning -->
       <div id="urduDisplay" class="urdu-word-display">پانی</div>
-      <div id="transliterationDisplay" class="transliteration">Paani</div>
-      <div id="meaningDisplay" class="meaning">Water</div>
-      <div id="targetSoundBadge" class="target-sound-pill">Target: Basic /n/</div>
-
-      <!-- Live Audio Waveform Visualizer -->
-      <div class="visualizer-container">
-        <canvas id="visualizer"></canvas>
-        <div id="timerOverlay" class="timer-overlay">0.0s</div>
+      <div class="word-meta-row">
+        <span id="transliterationDisplay" class="transliteration">Paani</span>
+        <span class="bullet">•</span>
+        <span id="meaningDisplay" class="meaning">Water</span>
       </div>
 
-      <!-- Record Control Button -->
-      <div class="controls-row">
-        <button id="btnRecord" class="btn-record" title="Click to Record Audio (Spacebar)">
-          <span id="recordIcon">🎤</span>
-        </button>
-      </div>
-      <div id="recordLabel" style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 16px;">
-        RECORD AUDIO
+      <!-- Consonant & Phonetic Position Badges -->
+      <div class="word-target-badges-row">
+        <div id="targetSoundBadge" class="target-sound-pill">Consonant: Nasal /n/</div>
+        <div id="positionBadge" class="position-pill">Position: Initial (Start)</div>
       </div>
 
-      <!-- Audio Preview Player -->
-      <div id="previewContainer" class="audio-preview-player" style="display: none;">
-        <audio id="audioPreview" controls style="width: 100%; border-radius: 8px;"></audio>
-      </div>
-
-      <!-- Real-Time Phoneme Analysis Feedback Panel -->
-      <div id="gopFeedbackPanel" class="gop-feedback-card" style="display: none;">
-        <div class="gop-header">
-          <span>Real-Time Phoneme Analysis (GOP Score)</span>
-          <span id="gopStatusBadge" class="gop-badge-ok">Passed</span>
+      <!-- Audio Recording Stage -->
+      <div class="audio-recording-section">
+        <!-- Live Waveform Visualizer -->
+        <div class="visualizer-container">
+          <canvas id="visualizer"></canvas>
+          <div id="timerOverlay" class="timer-overlay">0.0s</div>
         </div>
-        <div id="phonemeBadgesRow" class="phoneme-badges-row"></div>
-        <div id="gopSummaryNotice" class="gop-summary-text"></div>
+
+        <!-- Record Button -->
+        <div class="controls-row">
+          <button id="btnRecord" class="btn-record" title="Click to Record Audio (Spacebar)">
+            <span id="recordIcon">🎤</span>
+          </button>
+        </div>
+        <div id="recordLabel" class="record-label">
+          CLICK OR PRESS SPACEBAR TO RECORD
+        </div>
+
+        <!-- Audio Preview Player -->
+        <div id="previewContainer" class="audio-preview-player" style="display: none;">
+          <audio id="audioPreview" controls></audio>
+        </div>
       </div>
 
-      <!-- Navigation Row -->
+      <!-- TAAPU EVALUATION & CLINICAL RESPONSE PANEL -->
+      <div class="slp-evaluation-panel">
+        <!-- ALWAYS-SHOWN RESPONSE TYPE SECTION -->
+        <div class="response-type-section">
+          <div class="response-type-header">
+            <span>🗣️ Response Type / Elicitation Prompt (Always Shown):</span>
+          </div>
+          <div class="response-type-pills">
+            <label class="resp-pill active" id="pillSpontaneous">
+              <input type="radio" name="responseType" value="spontaneous" checked />
+              <span>🟢 Spontaneous</span>
+            </label>
+            <label class="resp-pill" id="pillHinted">
+              <input type="radio" name="responseType" value="hinted" />
+              <span>🟡 Hinted / Clue</span>
+            </label>
+            <label class="resp-pill" id="pillRepetition">
+              <input type="radio" name="responseType" value="repetition" />
+              <span>🟣 Repetition / Mimic</span>
+            </label>
+          </div>
+        </div>
+
+        <hr class="panel-divider" />
+
+        <!-- PRONUNCIATION ERROR FLAG BUTTON -->
+        <div class="error-flag-row">
+          <button id="btnFlagIncorrect" class="btn-flag-incorrect">
+            ⚠️ Mark Pronunciation Incorrect / Error
+          </button>
+        </div>
+
+        <!-- MISPRONOUNCED PHONEMES & ERROR REASON BOX (Expanded when Incorrect) -->
+        <div id="errorAnalysisBox" class="error-analysis-box" style="display: none;">
+          <!-- Phonemes Checklist -->
+          <div class="error-box-section">
+            <div class="error-section-title">1. Select Mispronounced Phoneme(s):</div>
+            <div id="phonemeCheckboxesRow" class="phoneme-checkboxes-row"></div>
+            <div class="custom-phoneme-row" style="margin-top: 8px;">
+              <input type="text" id="customPhonemeInput" class="meta-input" placeholder="Add custom phoneme (e.g. /l/)...">
+              <button id="btnAddCustomPhoneme" class="btn btn-sm btn-secondary">+ Add</button>
+            </div>
+          </div>
+
+          <!-- Error Reason / Type -->
+          <div class="error-box-section">
+            <div class="error-section-title">2. Reason / Error Type:</div>
+            <div class="error-reason-pills">
+              <label class="reason-chip"><input type="checkbox" value="Substitution" /> <span>Substitution</span></label>
+              <label class="reason-chip"><input type="checkbox" value="Omission / Deletion" /> <span>Omission / Deletion</span></label>
+              <label class="reason-chip"><input type="checkbox" value="Distortion" /> <span>Distortion</span></label>
+              <label class="reason-chip"><input type="checkbox" value="Addition" /> <span>Addition</span></label>
+            </div>
+            <div style="margin-top: 8px;">
+              <input type="text" id="substitutedSoundInput" class="meta-input" placeholder="Substituted sound (e.g., produced /r/ instead of /l/)...">
+            </div>
+          </div>
+
+          <!-- Phonological Processes (TAAPU) -->
+          <div class="error-box-section">
+            <div class="error-section-title">3. TAAPU Phonological Processes:</div>
+            <div class="phono-process-grid">
+              <label class="phono-chip"><input type="checkbox" value="Fronting" /> <span>Fronting (FR)</span></label>
+              <label class="phono-chip"><input type="checkbox" value="Stopping" /> <span>Stopping (ST)</span></label>
+              <label class="phono-chip"><input type="checkbox" value="Gliding" /> <span>Gliding (GL)</span></label>
+              <label class="phono-chip"><input type="checkbox" value="Cluster Reduction" /> <span>Cluster Reduction (CR)</span></label>
+              <label class="phono-chip"><input type="checkbox" value="Final Consonant Deletion" /> <span>Final Consonant Deletion (FCD)</span></label>
+              <label class="phono-chip"><input type="checkbox" value="Weak Syllable Deletion" /> <span>Weak Syllable Deletion (WSD)</span></label>
+              <label class="phono-chip"><input type="checkbox" value="Nasal Assimilation" /> <span>Nasal Assimilation</span></label>
+              <label class="phono-chip"><input type="checkbox" value="Depalatalization" /> <span>Depalatalization</span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clinician / SLP Notes -->
+        <div class="slp-notes-group">
+          <label for="slpNotesInput">Clinician / SLP Notes & Comments</label>
+          <textarea id="slpNotesInput" class="slp-notes-textarea" placeholder="Enter optional clinical observations, narrow IPA transcription, or phonetic notes..."></textarea>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
       <div class="nav-buttons">
-        <button id="btnPrev" class="btn btn-secondary">
+        <button id="btnPrev" class="btn btn-secondary btn-large">
           ← Previous
         </button>
-        <button id="btnNext" class="btn btn-primary">
+        <button id="btnNext" class="btn btn-primary btn-large">
           Next Word →
         </button>
       </div>
     </main>
   </div>
 
-  <!-- Word Grid Modal -->
+  <!-- WORD GRID MODAL (All 35 Words with Pictures & Status) -->
   <div id="gridModal" class="grid-modal">
     <div class="grid-content">
       <div class="grid-header">
-        <h2>Urdu Word Corpus List (35 Words)</h2>
-        <button id="btnCloseGrid" class="btn btn-secondary btn-icon-only">✕</button>
+        <div>
+          <h2>Urdu Word Corpus Grid (35 Words)</h2>
+          <p class="grid-subtitle">Visual Overview of Words, Audio Recordings, and Phonetic Position</p>
+        </div>
+        <div class="grid-header-actions">
+          <button id="btnExportExcelGrid" class="btn btn-excel btn-sm">📊 Export Excel</button>
+          <button id="btnCloseGrid" class="btn btn-secondary btn-icon-only">✕</button>
+        </div>
       </div>
-      <p style="font-size: 0.85rem; color: var(--text-muted);">
-        Click any word to jump directly to it. Cards marked with a green checkmark (✓) have been recorded in this session.
-      </p>
+
+      <!-- Grid Filter Tabs -->
+      <div class="grid-filter-tabs">
+        <button class="tab-btn active" data-filter="all">All Words (35)</button>
+        <button class="tab-btn" data-filter="recorded">Recorded 🎤</button>
+        <button class="tab-btn" data-filter="correct">Correct ✓</button>
+        <button class="tab-btn" data-filter="incorrect">Incorrect ✗</button>
+      </div>
+
+      <!-- Grid Container -->
       <div id="wordGrid" class="word-grid"></div>
     </div>
   </div>

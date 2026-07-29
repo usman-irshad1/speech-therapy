@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#ffedd5"/>
+  <!-- Dog Face -->
+  <circle cx="100" cy="110" r="55" fill="#b45309"/>
+  <!-- Floppy Ears -->
+  <ellipse cx="45" cy="110" rx="18" ry="35" fill="#78350f"/>
+  <ellipse cx="155" cy="110" rx="18" ry="35" fill="#78350f"/>
+  <!-- Snout -->
+  <ellipse cx="100" cy="125" rx="25" ry="20" fill="#fde68a"/>
+  <!-- Nose -->
+  <ellipse cx="100" cy="115" rx="10" ry="7" fill="#1c1917"/>
+  <!-- Eyes -->
+  <circle cx="80" cy="95" r="7" fill="#1c1917"/>
+  <circle cx="120" cy="95" r="7" fill="#1c1917"/>
+  <circle cx="82" cy="93" r="2" fill="#ffffff"/>
+  <circle cx="122" cy="93" r="2" fill="#ffffff"/>
+  <!-- Tongue -->
+  <path d="M95 133 Q100 155 105 133 Z" fill="#f43f5e"/>
+</svg>

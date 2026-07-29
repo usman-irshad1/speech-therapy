@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#f8fafc"/>
+  <!-- Egg Shape -->
+  <path d="M100 35 C135 35 155 85 155 125 C155 160 130 175 100 175 C70 175 45 160 45 125 C45 85 65 35 100 35 Z" fill="#fef3c7" stroke="#fde047" stroke-width="3"/>
+  <!-- Shadow/Shading -->
+  <path d="M115 50 C135 70 145 105 142 140" fill="none" stroke="#f59e0b" stroke-width="4" stroke-linecap="round" opacity="0.4"/>
+</svg>

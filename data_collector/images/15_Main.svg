@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect width="200" height="200" rx="20" fill="#fae8ff"/>
+  <!-- Person pointing to self "I / Me" -->
+  <circle cx="100" cy="70" r="30" fill="#6366f1"/>
+  <path d="M55 165 C55 120 145 120 145 165 Z" fill="#4f46e5"/>
+  <!-- Hand pointing towards chest -->
+  <circle cx="100" cy="135" r="10" fill="#fde047"/>
+  <text x="100" y="185" font-family="Arial" font-size="18" font-weight="bold" fill="#4338ca" text-anchor="middle">I / ME</text>
+</svg>
