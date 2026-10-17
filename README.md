@@ -1,7 +1,7 @@
 # Urdu Phoneme Recognition & Goodness-of-Pronunciation (GOP) Assessment Pipeline
 
-[![Python](https://img.shields.io/badge/Python-3.9%2B%20%7C%20PyTorch-blue?style=flat-square)]()
-[![Backbone](https://img.shields.io/badge/Backbone-IndicWav2Vec--Hindi%20%7C%20XLS--R-orange?style=flat-square)]()
+![Python](https://img.shields.io/badge/Python-3.9%2B%20%7C%20PyTorch-blue?style=flat-square)
+![Backbone](https://img.shields.io/badge/Backbone-IndicWav2Vec--Hindi%20%7C%20XLS--R-orange?style=flat-square)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 
 An end-to-end **Urdu Phoneme Recognition, Forced Alignment, and Goodness-of-Pronunciation (GOP) research pipeline** built with PyTorch and self-supervised Wav2Vec2 acoustic backbones, designed as an acoustic front-end toward automated Speech Sound Disorder (SSD) screening.
@@ -24,9 +24,9 @@ An end-to-end **Urdu Phoneme Recognition, Forced Alignment, and Goodness-of-Pron
 
 ## 📊 Dataset Provenance, Splits & Evaluation Methodology
 
-| Evaluation Component | Dataset Source | Split / Corpus Details | Metric & Observed Result |
+| Evaluation Component | Dataset Source | Split / Corpus Details (`manifests/`) | Metric & Observed Result |
 | :--- | :--- | :--- | :--- |
-| **Stage 1–2: CTC Phoneme Recognition** | **Mozilla Common Voice Urdu** (`data_organization/import_common_voice.py`) | Standard train / validation / held-out test splits built via `build_manifest.py` & `prepare_datset.py` with G2P IPA targets (`urdu_phoneme_vocab.json`). | **Test PER: `9.47%`** (`IndicWav2Vec-Hindi`) vs. **`13.21%`** (`XLS-R`) |
+| **Stage 1–2: CTC Phoneme Recognition** | **Mozilla Common Voice Urdu** (`data_organization/import_common_voice.py`) | **17,301 total utterances** across 3 CSV manifests with G2P IPA targets (`urdu_phoneme_vocab.json`):<br>• [`train_manifest.csv`](manifests/train_manifest.csv): **7,285** utterances<br>• [`dev_manifest.csv`](manifests/dev_manifest.csv): **4,988** utterances<br>• [`test_manifest.csv`](manifests/test_manifest.csv): **5,028** held-out test utterances | **Test PER: `9.47%`** (`IndicWav2Vec-Hindi`) vs. **`13.21%`** (`XLS-R`) |
 | **Stage 3: Word-Level GOP Scoring** | **Curated Urdu Word Audio Corpus** (`comprehensive_word_audio/` & `test_batch/`) | Target single-word Urdu recordings evaluated against canonical G2P phoneme transcriptions via CTC forced alignment. | Per-phoneme `GOP_Margin` & `GOP_MaxLogit` confidence scores |
 | **Stage 4–5: Disorder Taxonomy (Design Spec)** | Architectural specification (`documentation/urdu_child_speech_disorder_pipeline.md`) | Rule/graph-based error pattern aggregation (Articulation, Phonological, CAS, Dysarthria). | Architectural design & research specification (pending clinical pediatric corpus) |
 
