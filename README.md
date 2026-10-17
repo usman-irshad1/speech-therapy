@@ -16,7 +16,7 @@ An end-to-end Machine Learning pipeline for automatic speech sound disorder asse
 ## 🏗️ Repository Architecture
 
 ```
-spech_pipeline/
+speech-therapy/
 ├── g2p/                 # Grapheme-to-Phoneme conversion & IPA phonetic rules
 ├── data_organization/   # Manifest building, data extraction & dataset processors
 ├── training/            # Model training & fine-tuning scripts (IndicWav2Vec & XLS-R)
@@ -24,6 +24,7 @@ spech_pipeline/
 ├── scraping/            # Web scrapers & dictionary mining utilities
 ├── manifests/           # CSV manifests and urdu_phoneme_vocab.json
 ├── documentation/       # Research papers, pipeline specs & architecture guides
+├── LICENSE              # MIT License
 └── README.md            # Root repository guide
 ```
 
@@ -53,7 +54,7 @@ Raw Audio (16kHz Mono)
 [Stage 5] Clinical Diagnostic Report & SLP Review Interface
 ```
 
-For complete technical specifications, see [`documentation/pipeline_architecture_guide.md`](file:///C:/Users/usman/Desktop/spech_pipeline/documentation/pipeline_architecture_guide.md).
+For complete technical specifications, see [`documentation/pipeline_architecture_guide.md`](documentation/pipeline_architecture_guide.md).
 
 ---
 
@@ -62,8 +63,8 @@ For complete technical specifications, see [`documentation/pipeline_architecture
 ### 1. Installation
 
 ```bash
-git clone https://github.com/your-username/spech_pipeline.git
-cd spech_pipeline
+git clone https://github.com/usman-irshad1/speech-therapy.git
+cd speech-therapy
 pip install torch torchaudio transformers datasets numpy librosa
 ```
 
@@ -108,8 +109,14 @@ python testing/batch_test.py
 
 ## 📚 Documentation Index
 
-- [`documentation/pipeline_architecture_guide.md`](file:///C:/Users/usman/Desktop/spech_pipeline/documentation/pipeline_architecture_guide.md) — Comprehensive stage-by-stage architecture guide.
-- [`documentation/changelog_and_context.md`](file:///C:/Users/usman/Desktop/spech_pipeline/documentation/changelog_and_context.md) — Project refactoring log & context tracker.
-- [`documentation/urdu_child_speech_disorder_pipeline.md`](file:///C:/Users/usman/Desktop/spech_pipeline/documentation/urdu_child_speech_disorder_pipeline.md) — End-to-end research document.
-- [`data/README.md`](file:///C:/Users/usman/Desktop/spech_pipeline/data/README.md) — Raw dataset acquisition guide.
-- [`cache/README.md`](file:///C:/Users/usman/Desktop/spech_pipeline/cache/README.md) — Common Voice dataset download guide.
+- [`documentation/pipeline_architecture_guide.md`](documentation/pipeline_architecture_guide.md) — Comprehensive stage-by-stage architecture guide.
+- [`documentation/changelog_and_context.md`](documentation/changelog_and_context.md) — Project refactoring log & context tracker.
+- [`documentation/urdu_child_speech_disorder_pipeline.md`](documentation/urdu_child_speech_disorder_pipeline.md) — End-to-end research document.
+- [`data/README.md`](data/README.md) — Raw dataset acquisition guide.
+- [`cache/README.md`](cache/README.md) — Common Voice dataset download guide.
+
+---
+
+## 📜 License
+
+This project is licensed under the [MIT License](LICENSE).
